@@ -1,0 +1,20 @@
+name: "Mirror a repository using SSH"
+description: "Action for mirroring a repository in another location (Bitbucket, GitHub, GitLab, …) using SSH."
+branding:
+  icon: "copy"
+  color: "orange"
+inputs:
+  config-file:
+    description: "Path to the YAML configuration file"
+    required: true
+    default: "sync-config.yml"
+  dry-run:
+    description: "Perform a dry run without pushing changes"
+    required: false
+    default: "false"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.config-file }}
+    - ${{ inputs.dry-run }}

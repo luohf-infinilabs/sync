@@ -19,7 +19,6 @@
 在 GitHub 仓库的设置中添加以下 Secrets：
 
 - **GITEE_PRIVATE_KEY**: Gitee 的 SSH 私钥。
-- **GITEE_TOKEN**: Gitee 的个人访问令牌。
 
 ### 3. GitHub Actions 工作流
 
