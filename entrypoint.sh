@@ -34,17 +34,22 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 # 遍历配置文件中的仓库列表
-yq e '.repos[]' "$CONFIG_FILE" | while read -r repo
-do
-  SRC=$(echo "$repo" | yq e '.src' -)
-  DST=$(echo "$repo" | yq e '.dst' -)
-
-  echo "Syncing $SRC to $DST"
-
-  # 调用 git-mirror.sh 脚本
-  /git-mirror.sh "$SRC" "$DST" "$DRY_RUN"
-
-  echo "Sync completed for $SRC"
+sed -n '/^  - src:/,/^  - src:/p' "$CONFIG_FILE" | while read -r line; do
+  case "$line" in
+    *src:*)
+      SRC=$(echo "$line" | sed 's/.*src: *"\(.*\)".*/\1/')
+      ;;
+    *dst:*)
+      DST=$(echo "$line" | sed 's/.*dst: *"\(.*\)".*/\1/')
+      if [ -n "$SRC" ] && [ -n "$DST" ]; then
+        echo "Syncing $SRC to $DST"
+        /git-mirror.sh "$SRC" "$DST" "$DRY_RUN"
+        echo "Sync completed for $SRC"
+      fi
+      SRC=""
+      DST=""
+      ;;
+  esac
 done
 
 echo "All repositories synced successfully"
