@@ -24,5 +24,22 @@ jobs:
 
       - name: Push image to TCR
         run: |
-          docker push ccr.ccs.tencentyun.com/infini/nginx-rtmp:latest
+          retry() {
+            local n=1
+            local max=5
+            local delay=15
+            while true; do
+              "$@" && break || {
+                if [[ $n -lt $max ]]; then
+                  ((n++))
+                  echo "Command failed. Attempt $n/$max:"
+                  sleep $delay;
+                else
+                  echo "The command has failed after $n attempts."
+                  return 1
+                fi
+              }
+            done
+          }
+          retry docker push ccr.ccs.tencentyun.com/infini/nginx-rtmp:latest
 
