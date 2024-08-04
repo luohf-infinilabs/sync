@@ -1,39 +1,24 @@
 name: Sync to Gitee
 
 on:
+  push:
+    branches: [main]
   schedule:
-    - cron: '0 1 * * *'  # 每天凌晨1点运行
-  workflow_dispatch:  # 允许手动触发
+    - cron: "0 1 * * *" # 每天凌晨1点运行
+  workflow_dispatch:
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "$GITEE_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan gitee.com >> ~/.ssh/known_hosts
-
-      - name: Read settings.json
-        id: read-settings
-        run: cat settings.json
-        shell: bash
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Sync repositories
-        run: |
-          echo "${{ steps.read-settings.outputs.result }}" | jq -c '.repositories[]' | while read -r repo; do
-            src=$(echo $repo | jq -r '.src')
-            dst=$(echo $repo | jq -r '.dst')
-            echo "Syncing $src to $dst"
-            
-            docker run --rm -v ~/.ssh:/root/.ssh yikun/hub-mirror-action:latest \
-              --src "$src" --dst "gitee.com/$dst" \
-              --dst-key "${{ secrets.GITEE_PRIVATE_KEY }}" \
-              --dst-token "${{ secrets.GITEE_TOKEN }}" \
-              --force-update
-          done
+        uses: ./ # 使用当前目录的 Action
+        with:
+          config-file: "sync-config.yml"
+          dry-run: "false"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
+
