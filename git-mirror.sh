@@ -58,3 +58,4 @@ echo "Sync completed successfully"
 # 清理
 cd ..
 rm -rf "$SOURCE_DIR"
+
