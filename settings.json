@@ -1,0 +1,12 @@
+{
+  "repositories": [
+    {
+      "src": "https://github.com/pyenv/pyenv",
+      "dst": "luohf-infinilabs/pyenv"
+    },
+    {
+      "src": "https://github.com/ohmyzsh/ohmyzsh",
+      "dst": "luohf-infinilabs/oh-my-zsh"
+    }
+  ]
+}
