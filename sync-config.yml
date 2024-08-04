@@ -1,12 +1,7 @@
-repos:
+repositories:
   - src: "git@github.com:ohmyzsh/ohmyzsh.git"
-    dst: "git@gitee.com:infinihardy/ohmyzsh.git"
+    dst: "git@github.com:luohf-infinilabs/ohmyzsh.git"
   - src: "git@github.com:pyenv/pyenv.git"
-    dst: "git@gitee.com:infinihardy/pyenv.git"
+    dst: "git@github.com:luohf-infinilabs/pyenv.git"
   - src: "git@github.com:pyenv/pyenv-virtualenv.git"
-    dst: "git@gitee.com:infinihardy/pyenv-virtualenv.git"
-  - src: "git@github.com:pyenv/pyenv-virtualenv.git"
-    dst: "git@gitee.com:infinihardy/pyenv-virtualenv.git"
-  - src: "git@github.com:nvm-sh/nvm.git"
-    dst: "git@gitee.com:infinihardy/nvm.git"
-
+    dst: "git@github.com:luohf-infinilabs/pyenv-virtualenv.git"

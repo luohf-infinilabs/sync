@@ -10,9 +10,9 @@
 
 ## 配置步骤
 
-### 1. 创建 `sync-config.yml`
+### 1. 创建 `sync-repos.yml`
 
-在项目根目录下创建一个 `sync-config.yml` 文件，配置要同步的仓库。
+在项目根目录下创建一个 `sync-repos.yml` 文件，配置要同步的仓库。
 
 ### 2. 配置 GitHub Secrets
 
@@ -22,7 +22,7 @@
 
 ### 3. GitHub Actions 工作流
 
-项目中包含的 GitHub Actions 工作流位于 `.github/workflows/sync-to-gitee.yml`，该工作流会根据 `sync-config.yml` 中的配置同步仓库。
+项目中包含的 GitHub Actions 工作流位于 `.github/workflows/sync-to-gitee.yml`，该工作流会根据 `sync-repos.yml` 中的配置同步仓库。
 
 ### 4. 手动触发
 

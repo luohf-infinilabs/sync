@@ -2,7 +2,7 @@
 
 set -e
 
-CONFIG_FILE=${1:-"/sync-config.yml"}
+CONFIG_FILE=${1:-"/sync-repos.yml"}
 DRY_RUN=${2:-"false"}
 
 # SSH 设置
@@ -53,4 +53,3 @@ sed -n '/^  - src:/,/^  - src:/p' "$CONFIG_FILE" | while read -r line; do
 done
 
 echo "All repositories synced successfully"
-

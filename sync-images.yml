@@ -1,0 +1,4 @@
+images:
+  - tiangolo/nginx-rtmp
+  - nginx:1.21
+  - postgres:13
