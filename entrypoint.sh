@@ -5,6 +5,7 @@ set -e
 CONFIG_FILE=${1:-"/sync-config.yml"}
 DRY_RUN=${2:-"false"}
 
+# SSH 设置
 if [ -n "$SSH_PRIVATE_KEY" ]
 then
   mkdir -p /root/.ssh
@@ -33,7 +34,8 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 # 遍历配置文件中的仓库列表
-yq e '.repositories[]' $CONFIG_FILE | while read -r repo; do
+yq e '.repos[]' "$CONFIG_FILE" | while read -r repo
+do
   SRC=$(echo "$repo" | yq e '.src' -)
   DST=$(echo "$repo" | yq e '.dst' -)
 
@@ -46,3 +48,4 @@ yq e '.repositories[]' $CONFIG_FILE | while read -r repo; do
 done
 
 echo "All repositories synced successfully"
+

@@ -1,4 +1,4 @@
-repositories:
+repos:
   - src: "git@github.com:ohmyzsh/ohmyzsh.git"
     dst: "git@github.com:luohf-infinilabs/ohmyzsh.git"
   - src: "git@github.com:pyenv/pyenv.git"
