@@ -7,6 +7,8 @@ on:
 jobs:
   sync-images:
     runs-on: ubuntu-latest
+    env:
+      TCR_REGISTRY: ccr.ccs.tencentyun.com/infini
     steps:
       - uses: actions/checkout@v4
 
@@ -18,27 +20,29 @@ jobs:
         run: |
           # 定义重试函数
           retry() {
-            local n=1
-            local max=5
+            local max_attempts=5
             local delay=15
-            while true; do
-              "$@" && break || {
-                if [[ $n -lt $max ]]; then
-                  ((n++))
-                  echo "Command failed. Attempt $n/$max:"
-                  sleep $delay;
-                else
-                  echo "The command has failed after $n attempts."
-                  return 1
-                fi
-              }
+            local attempt=1
+            until "$@"; do
+              if ((attempt == max_attempts)); then
+                echo "Command failed after $max_attempts attempts."
+                return 1
+              fi
+              echo "Command failed. Retrying in $delay seconds..."
+              sleep $delay
+              ((attempt++))
             done
           }
 
           # 读取 sync-images.yml 文件并同步镜像
           grep '^\s*-\s*' sync-images.yml | awk '{print $2}' | while read -r image; do
-            echo "Syncing $image"
+            echo "Pulling from $image"
             docker pull $image
-            docker tag $image ccr.ccs.tencentyun.com/infini/${image//\//-}
-            retry docker push ccr.ccs.tencentyun.com/infini/${image//\//-}
+            
+            target_image=$TCR_REGISTRY/${image##*/}
+            echo "Pushing to target $target_image"
+            
+            docker tag $image $target_image
+            retry docker push $target_image
           done
+
